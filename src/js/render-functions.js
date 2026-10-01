@@ -51,6 +51,22 @@ export function hideLoader() {
 export function showLoadMoreButton() {
   refs.loadMoreBtn.classList.add('visible');
 }
+
 export function hideLoadMoreButton() {
   refs.loadMoreBtn.classList.remove('visible');
+}
+
+export function getDoubleCardHeight() {
+  const cardHeight = document
+    .querySelector('.gallery-item')
+    .getBoundingClientRect().height;
+  return cardHeight * 2 + 24 * 2;
+}
+
+export function scrollWindow(height) {
+  gallery.refresh();
+  window.scrollBy({
+    top: height,
+    behavior: 'smooth',
+  });
 }
