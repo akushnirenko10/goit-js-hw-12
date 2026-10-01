@@ -9,19 +9,29 @@ const gallery = new SimpleLightbox('.gallery a', {
 
 export function createGallery(images) {
   const markup = images
-    .map(image => {
-      return `<li class="gallery-item">
-  <a class="gallery-item" href="${image.largeImageURL}">
-  <img src="${image.webformatURL}" alt="${image.tags}" />
+    .map(
+      ({
+        largeImageURL,
+        webformatURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `<li class="gallery-item">
+  <a class="gallery-item" href="${largeImageURL}">
+  <img src="${webformatURL}" alt="${tags}" />
 </a>
   <div class="gallery-text-wrapper">
-    <p class="likes"><span>Likes</span> ${image.likes}</p>
-    <p class="likes"><span>Views</span> ${image.views}</p>
-    <p class="likes"><span>Comments</span> ${image.comments}</p>
-    <p class="likes"><span>Downloads</span> ${image.downloads}</p>
+    <p class="likes"><span>Likes</span> ${likes}</p>
+    <p class="likes"><span>Views</span> ${views}</p>
+    <p class="likes"><span>Comments</span> ${comments}</p>
+    <p class="likes"><span>Downloads</span> ${downloads}</p>
   </div>
 </li>`;
-    })
+      }
+    )
     .join('');
   refs.gallery.insertAdjacentHTML('beforeend', markup);
   gallery.refresh();
@@ -36,4 +46,11 @@ export function showLoader() {
 }
 export function hideLoader() {
   refs.loader.classList.remove('visible');
+}
+
+export function showLoadMoreButton() {
+  refs.loadMoreBtn.classList.add('visible');
+}
+export function hideLoadMoreButton() {
+  refs.loadMoreBtn.classList.remove('visible');
 }

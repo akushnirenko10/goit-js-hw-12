@@ -29,7 +29,8 @@
   border-color: #4e75ff;
 }
 
-.form button {
+.form button,
+.load-more-btn {
   font-weight: 500;
   font-size: 16px;
   line-height: 1.5;
@@ -43,6 +44,17 @@
   background-color: #4e75ff;
 }
 
-.form button:hover {
+.form button:hover,
+.load-more-btn:hover {
   background-color: #6c8cff;
+}
+
+.load-more-btn {
+  display: none;
+  margin: 32px auto;
+  width: 125px;
+}
+
+.load-more-btn.visible {
+  display: block;
 }

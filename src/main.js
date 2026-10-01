@@ -4,44 +4,90 @@ import {
   clearGallery,
   createGallery,
   hideLoader,
+  hideLoadMoreButton,
   showLoader,
+  showLoadMoreButton,
 } from './js/render-functions';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-refs.form.addEventListener('submit', onFormSubmit);
+let page = 1;
+let query = '';
 
-function onFormSubmit(event) {
+refs.form.addEventListener('submit', onFormSubmit);
+refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
+
+async function onFormSubmit(event) {
   event.preventDefault();
   clearGallery();
 
-  const value = event.currentTarget.elements['search-text'].value.trim();
+  const newQuery = event.currentTarget.elements['search-text'].value
+    .trim()
+    .toLowerCase();
 
-  if (value === '') {
+  query = query !== newQuery ? newQuery : query;
+
+  if (query === '') {
     return;
   }
 
   showLoader();
 
-  getImagesByQuery(value)
-    .then(data => {
-      if (data.hits.length === 0) {
-        iziToast.error({
-          message:
-            'Sorry, there are no images matching your search query. Please try again!',
-          position: 'topRight',
-        });
-        return;
-      }
+  try {
+    const { hits, totalHits } = await getImagesByQuery(query, page);
+    const totalPages = Math.ceil(totalHits / 15);
 
-      createGallery(data.hits);
-    })
+    if (page < totalPages) {
+      showLoadMoreButton();
+      page += 1;
+    }
 
-    .catch(err => {
+    if (hits.length === 0) {
       iziToast.error({
-        message: err.message,
+        message:
+          'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight',
       });
-    })
-    .finally(() => hideLoader());
+      return;
+    }
+
+    createGallery(hits);
+  } catch (err) {
+    iziToast.error({
+      message: err.message,
+      position: 'topRight',
+    });
+  } finally {
+    hideLoader();
+    event.target.reset();
+  }
+}
+
+async function onLoadMoreBtnClick() {
+  showLoader();
+
+  try {
+    const { hits, totalHits } = await getImagesByQuery(query, page);
+    const totalPages = Math.ceil(totalHits / 15);
+
+    if (page < totalPages) {
+      showLoadMoreButton();
+      page += 1;
+    } else {
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+      });
+      hideLoadMoreButton();
+    }
+
+    createGallery(hits);
+  } catch (err) {
+    iziToast.error({
+      message: err.message,
+      position: 'topRight',
+    });
+  } finally {
+    hideLoader();
+  }
 }
