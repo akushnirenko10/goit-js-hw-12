@@ -1,5 +1,6 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import { showLoadMoreButton } from './render-functions';
 
 export function showTost(message, type = 'success') {
   const options = {
@@ -32,4 +33,15 @@ export function showTost(message, type = 'success') {
 
 export function isQueryEmpty(query) {
   return query === '';
+}
+
+export function checkPageCount(page, totalPages) {
+  if (page < totalPages) {
+    showLoadMoreButton();
+  } else {
+    showTost(
+      "We're sorry, but you've reached the end of search results",
+      'info'
+    );
+  }
 }

@@ -1,4 +1,4 @@
-import { isQueryEmpty, showTost } from './js/helpers';
+import { checkPageCount, isQueryEmpty, showTost } from './js/helpers';
 import { getImagesByQuery } from './js/pixabay-api';
 import { refs } from './js/refs';
 import {
@@ -21,28 +21,15 @@ refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
 
 async function onFormSubmit(event) {
   event.preventDefault();
+  page = 1;
 
-  const newQuery = event.currentTarget.elements['search-text'].value
+  query = event.currentTarget.elements['search-text'].value
     .trim()
     .toLowerCase();
-
-  if (newQuery !== query) {
-    query = newQuery;
-    page = 1;
-  } else {
-    page += 1;
-  }
 
   if (isQueryEmpty(query)) {
     event.target.reset();
     return;
-  }
-
-  if (page > totalPages) {
-    return showTost(
-      "We're sorry, but you've reached the end of search results",
-      'info'
-    );
   }
 
   clearGallery();
@@ -61,10 +48,7 @@ async function onFormSubmit(event) {
       return;
     }
 
-    if (page < totalPages) {
-      showLoadMoreButton();
-    }
-
+    checkPageCount(page, totalPages);
     createGallery(hits);
   } catch (err) {
     showTost(err.message, 'error');
@@ -82,17 +66,7 @@ async function onLoadMoreBtnClick() {
   try {
     const { hits } = await getImagesByQuery(query, page);
 
-    if (page < totalPages) {
-      showLoadMoreButton();
-    } else {
-      showTost(
-        "We're sorry, but you've reached the end of search results",
-        'info'
-      );
-      hideLoadMoreButton();
-      return;
-    }
-
+    checkPageCount(page, totalPages);
     createGallery(hits);
     scrollWindow(getDoubleCardHeight());
   } catch (err) {
