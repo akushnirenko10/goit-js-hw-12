@@ -4,7 +4,6 @@ import { refs } from './js/refs';
 import {
   clearGallery,
   createGallery,
-  gallery,
   hideLoader,
   hideLoadMoreButton,
   showLoader,
@@ -82,7 +81,6 @@ function getDoubleCardHeight() {
 }
 
 function scrollWindow(height) {
-  gallery.refresh();
   window.scrollBy({
     top: height,
     behavior: 'smooth',
