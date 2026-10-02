@@ -77,7 +77,7 @@ function getDoubleCardHeight() {
   const cardHeight = document
     .querySelector('.gallery-item')
     .getBoundingClientRect().height;
-  return cardHeight * 2 + 24 * 2;
+  return cardHeight * 2;
 }
 
 function scrollWindow(height) {
