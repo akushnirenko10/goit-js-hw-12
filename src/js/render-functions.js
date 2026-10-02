@@ -2,7 +2,7 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { refs } from './refs';
 
-const gallery = new SimpleLightbox('.gallery a', {
+export const gallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
@@ -54,19 +54,4 @@ export function showLoadMoreButton() {
 
 export function hideLoadMoreButton() {
   refs.loadMoreBtn.classList.remove('visible');
-}
-
-export function getDoubleCardHeight() {
-  const cardHeight = document
-    .querySelector('.gallery-item')
-    .getBoundingClientRect().height;
-  return cardHeight * 2 + 24 * 2;
-}
-
-export function scrollWindow(height) {
-  gallery.refresh();
-  window.scrollBy({
-    top: height,
-    behavior: 'smooth',
-  });
 }

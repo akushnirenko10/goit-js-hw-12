@@ -4,12 +4,10 @@ import { refs } from './js/refs';
 import {
   clearGallery,
   createGallery,
-  getDoubleCardHeight,
+  gallery,
   hideLoader,
   hideLoadMoreButton,
-  scrollWindow,
   showLoader,
-  showLoadMoreButton,
 } from './js/render-functions';
 
 let page = 1;
@@ -74,4 +72,19 @@ async function onLoadMoreBtnClick() {
   } finally {
     hideLoader();
   }
+}
+
+function getDoubleCardHeight() {
+  const cardHeight = document
+    .querySelector('.gallery-item')
+    .getBoundingClientRect().height;
+  return cardHeight * 2 + 24 * 2;
+}
+
+function scrollWindow(height) {
+  gallery.refresh();
+  window.scrollBy({
+    top: height,
+    behavior: 'smooth',
+  });
 }
